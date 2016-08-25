@@ -10,7 +10,7 @@ Web-service with RESTful API.
 
 Right now one can add `Subscriber` by sending
 
-```
+```json
 {"title": "<title>"}
 ```
 
