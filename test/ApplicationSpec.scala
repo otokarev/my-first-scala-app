@@ -35,39 +35,26 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       status(r1) mustBe OK
       contentType(r1) mustBe Some("text/json")
       (Json.parse(contentAsString(r1)) \ "object" \ "title").as[String] mustEqual "First"
+
+      (Json.parse(contentAsString(r1)) \ "object" \ "id").as[Long] mustEqual 1
+    }
+
+    "Update just created instance with title=Second" in {
+      val r2 = route(app, FakeRequest(PUT, "/subscriber/1").withJsonBody(Json.obj(
+        "title" -> "Second"
+      ))).get
+      println(contentAsString(r2))
+
+      status(r2) mustBe OK
+      val r3 = route(app, FakeRequest(GET, "/subscriber/1")).get
+      println(contentAsString(r3))
+      status(r3) mustBe OK
+      (Json.parse(contentAsString(r3)) \ "object" \ "title").as[String] mustEqual "Second"
+      (Json.parse(contentAsString(r3)) \ "object" \ "id").as[Long] mustEqual 1
     }
 
   }
 
-//  "Routes" should {
-//
-//    "send 404 on a bad request" in {
-//      route(app, FakeRequest(GET, "/boum")).map(status(_)) mustBe Some(NOT_FOUND)
-//    }
-//
-//  }
-//
-//  "HomeController" should {
-//
-//    "render the index page" in {
-//      val home = route(app, FakeRequest(GET, "/")).get
-//
-//      status(home) mustBe OK
-//      contentType(home) mustBe Some("text/html")
-//      contentAsString(home) must include("Your new application is ready.")
-//    }
-//
-//  }
-//
-//  "CountController" should {
-//
-//    "return an increasing count" in {
-//      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "0"
-//      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "1"
-//      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "2"
-//    }
-//
-//  }
 
 }
 

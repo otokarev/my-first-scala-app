@@ -27,16 +27,16 @@ class Subscriber @Inject() (protected val dbConfigProvider: DatabaseConfigProvid
     db.run((subscribers returning subscribers.map(_.id) into ((subscribers, id) => subscribers.copy(id = Some(id)))) += subscriber)
   }
 
+  def replace(subscriber: SubscriberModel): Future[Int] = {
+    db.run(subscribers.filter(_.id === subscriber.id).update(subscriber))
+  }
+
   def delete(id: Long): Future[Int] = {
     db.run(subscribers.filter(_.id === id).delete)
   }
 
   def get(id: Long): Future[Option[SubscriberModel]] = {
     db.run(subscribers.filter(_.id === id).result.headOption)
-  }
-
-  def listAll: Future[Seq[SubscriberModel]] = {
-    db.run(subscribers.result)
   }
 
 }
