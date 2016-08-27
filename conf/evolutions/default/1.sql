@@ -13,6 +13,7 @@ CREATE TABLE "channel" (
     "title" varchar(255) NOT NULL,
     PRIMARY KEY ("id")
 );
+INSERT INTO "channel"("title") VALUES ('Default');
 
 CREATE TABLE "channel_subscriber" (
     "id" bigint(20) NOT NULL AUTO_INCREMENT,

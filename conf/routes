@@ -3,6 +3,7 @@
 # ~~~~
 
 # Subscribers' controller
+GET     /subscriber/                controllers.SubscriberController.list
 GET     /subscriber/:id             controllers.SubscriberController.get(id: Long)
 POST    /subscriber                 controllers.SubscriberController.post
 PUT     /subscriber/:id             controllers.SubscriberController.put(id: Long)

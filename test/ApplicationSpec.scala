@@ -49,10 +49,18 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       val r3 = route(app, FakeRequest(GET, "/subscriber/1")).get
       println(contentAsString(r3))
       status(r3) mustBe OK
-      (Json.parse(contentAsString(r3)) \ "object" \ "title").as[String] mustEqual "Second"
-      (Json.parse(contentAsString(r3)) \ "object" \ "id").as[Long] mustEqual 1
+      (Json.parse(contentAsString(r3)) \ "title").as[String] mustEqual "Second"
+      (Json.parse(contentAsString(r3)) \ "id").as[Long] mustEqual 1
     }
 
+    "Check that under /subscriber/ our new record is also available" in {
+      val r4 = route(app, FakeRequest(GET, "/subscriber/")).get
+      println(contentAsString(r4))
+
+      status(r4) mustBe OK
+      ((Json.parse(contentAsString(r4)) \ "items")(0) \ "title").as[String] mustEqual "Second"
+      ((Json.parse(contentAsString(r4)) \ "items")(0) \ "id").as[Long] mustEqual 1
+    }
   }
 
 

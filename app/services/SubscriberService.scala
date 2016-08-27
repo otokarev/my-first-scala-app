@@ -37,4 +37,7 @@ class SubscriberService @Inject()(protected val dbConfigProvider: DatabaseConfig
     db.run(subscribers.filter(_.id === id).result.headOption)
   }
 
+  def get() : Future[Seq[Subscriber]] = {
+    db.run(subscribers.result)
+  }
 }

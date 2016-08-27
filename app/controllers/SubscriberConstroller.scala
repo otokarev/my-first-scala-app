@@ -10,7 +10,9 @@ import play.api.libs.functional.syntax._
 import services.SubscriberService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+import scala.util.{Failure, Success, Try}
 
 @Singleton
 class SubscriberController @Inject() (SubscriberService: SubscriberService) extends Controller {
@@ -19,6 +21,9 @@ class SubscriberController @Inject() (SubscriberService: SubscriberService) exte
     (JsPath \ "id").formatNullable[Long] and
       (JsPath \ "title").format[String](minLength[String](1))
     )(Subscriber.apply, unlift(Subscriber.unapply))
+  trait ModelConverter[T] {
+
+  }
 
   def post = Action.async(BodyParsers.parse.json) { request =>
     request.body.validate[Subscriber].fold(
@@ -62,9 +67,20 @@ class SubscriberController @Inject() (SubscriberService: SubscriberService) exte
   }
   def get(id: Long) = Action.async { request =>
     SubscriberService.get(id) map { subscriber =>
-      Ok(Json.obj("status" -> "OK", "message" -> "object retrieved", "object" -> subscriber)).as("text/json")
+      Ok(Json.toJson(subscriber)).as("text/json")
     } recover {
       case e => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+    }
+  }
+  def list() = Action { request => {
+      Try {
+        val f = SubscriberService.get()
+        val subscribers = Await.result(f, Duration.Inf)
+        Ok(Json.obj("status" -> "OK", "items" -> subscribers)).as("text/json")
+      } match {
+        case Success(r) => r
+        case Failure(e) => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+      }
     }
   }
 }
