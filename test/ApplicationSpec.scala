@@ -61,6 +61,15 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       ((Json.parse(contentAsString(r4)) \ "items")(0) \ "title").as[String] mustEqual "Second"
       ((Json.parse(contentAsString(r4)) \ "items")(0) \ "id").as[Long] mustEqual 1
     }
+
+    "Check that under /channel/ our `Default` channel is available" in {
+      val r = route(app, FakeRequest(GET, "/channel/")).get
+      println(contentAsString(r))
+
+      status(r) mustBe OK
+      ((Json.parse(contentAsString(r)) \ "items")(0) \ "title").as[String] mustEqual "Default"
+      ((Json.parse(contentAsString(r)) \ "items")(0) \ "id").as[Long] mustEqual 1
+    }
   }
 
 
