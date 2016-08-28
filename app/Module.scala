@@ -1,5 +1,7 @@
-import com.google.inject.AbstractModule
+import com.google.inject.{AbstractModule, Provides}
 import java.time.Clock
+
+import models._
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -12,10 +14,14 @@ import java.time.Clock
  * configuration file.
  */
 class Module extends AbstractModule {
+  import tables.Tables._
 
   override def configure() = {
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }
 
+  @Provides def subscriberDao : BaseDao[SubscriberTable, SubscriberModel] = new Dao[SubscriberTable,SubscriberModel]
+  @Provides def channelDao : BaseDao[ChannelTable, ChannelModel] = new Dao[ChannelTable,ChannelModel]
+  @Provides def channelSubscriberDao : BaseDao[ChannelSubscriberTable, ChannelSubscriberModel] = new Dao[ChannelSubscriberTable,ChannelSubscriberModel]
 }

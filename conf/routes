@@ -4,8 +4,14 @@
 
 # Subscribers' controller
 GET     /channel/                   controllers.ChannelController.list
+
 GET     /subscriber/                controllers.SubscriberController.list
 GET     /subscriber/:id             controllers.SubscriberController.get(id: Long)
 POST    /subscriber                 controllers.SubscriberController.post
 PUT     /subscriber/:id             controllers.SubscriberController.put(id: Long)
 DELETE  /subscriber/:id             controllers.SubscriberController.delete(id: Long)
+
+GET     /channel-subscriber/:id             controllers.ChannelSubscriberController.get(id: Long)
+POST    /channel-subscriber                 controllers.ChannelSubscriberController.post
+PUT     /channel-subscriber/:id             controllers.ChannelSubscriberController.put(id: Long)
+DELETE  /channel-subscriber/:id             controllers.ChannelSubscriberController.delete(id: Long)

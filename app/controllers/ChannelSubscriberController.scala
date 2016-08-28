@@ -2,27 +2,30 @@ package controllers
 
 import javax.inject._
 
-import models.{BaseDao, ChannelModel}
+import models.{BaseDao, ChannelSubscriberModel}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import play.api.mvc._
-import tables.Tables.ChannelTable
+import tables.Tables.ChannelSubscriberTable
 
-import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class ChannelController @Inject() (service: BaseDao[ChannelTable, ChannelModel])(implicit exec: ExecutionContext) extends Controller {
+class ChannelSubscriberController @Inject()(service: BaseDao[ChannelSubscriberTable, ChannelSubscriberModel])(implicit exec: ExecutionContext) extends Controller {
 
-  implicit val subscriberFormat: Format[ChannelModel] = (
-    (JsPath \ "id").formatNullable[Long] and
-      (JsPath \ "title").format[String](minLength[String](1))
-    )(ChannelModel.apply, unlift(ChannelModel.unapply))
+  implicit val itemFormat: Format[ChannelSubscriberModel] = (
+    (__ \ "id").formatNullable[Long] and
+      (__ \ "title").format[String](minLength[String](1)) and
+      (__ \ "subscriberId").format[Long] and
+      (__ \ "channelId").format[Long] and
+      (__ \ "cfg").format[String]
+    )(ChannelSubscriberModel.apply, unlift(ChannelSubscriberModel.unapply))
 
   def post = Action.async(BodyParsers.parse.json) { request =>
-    request.body.validate[ChannelModel].fold(
+    request.body.validate[ChannelSubscriberModel].fold(
       errors => {
         Future {
           BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors))).as("text/json")
@@ -37,7 +40,7 @@ class ChannelController @Inject() (service: BaseDao[ChannelTable, ChannelModel])
       })
   }
   def put(id:Long) = Action.async(BodyParsers.parse.json) { request => {
-    request.body.validate[ChannelModel]
+    request.body.validate[ChannelSubscriberModel]
       .filter(JsError(s"id is specified in the body and not equal to $id"))(s => {s.id.isEmpty || s.id.get == id})
       .fold(
         errors => {

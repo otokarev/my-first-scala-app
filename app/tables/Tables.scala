@@ -1,0 +1,45 @@
+package tables
+
+import models.{ChannelModel, ChannelSubscriberModel, SubscriberModel}
+import play.api.Play
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
+import slick.driver.JdbcProfile
+
+object Tables extends HasDatabaseConfig[JdbcProfile] {
+  protected lazy val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+  import dbConfig.driver.api._
+
+  abstract class BaseTable[T](tag: Tag, name: String) extends Table[T](tag, name) {
+    def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
+  }
+
+  class SubscriberTable(tag: Tag) extends BaseTable[SubscriberModel](tag, "subscriber") {
+    def title = column[String]("title")
+    def * = (id.?, title) <> (SubscriberModel.tupled, SubscriberModel.unapply)
+  }
+
+  class ChannelTable(tag: Tag) extends BaseTable[ChannelModel](tag, "channel") {
+
+    def title = column[String]("title")
+
+    def * = (id.?, title) <> (ChannelModel.tupled, ChannelModel.unapply)
+  }
+
+  class ChannelSubscriberTable(tag: Tag) extends BaseTable[ChannelSubscriberModel](tag, "channel_subscriber") {
+
+    def title = column[String]("title")
+    def channelId = column[Long]("channelId")
+    def subscriberId = column[Long]("subscriberId")
+    def cfg = column[String]("cfg")
+
+    def * = (id.?, title, channelId, subscriberId, cfg) <> (ChannelSubscriberModel.tupled, ChannelSubscriberModel.unapply)
+  }
+
+
+  implicit val subscriberTableQuery : TableQuery[SubscriberTable] = TableQuery[SubscriberTable]
+  implicit val channelTableQuery : TableQuery[ChannelTable] = TableQuery[ChannelTable]
+  implicit val channelSubscriberTableQuery : TableQuery[ChannelSubscriberTable] = TableQuery[ChannelSubscriberTable]
+}
+
+
+
