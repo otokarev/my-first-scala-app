@@ -1,7 +1,5 @@
 package models
 
-import models.BaseModel
-import tables.Tables
 import tables.Tables._
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
@@ -26,7 +24,7 @@ trait BaseDao[T,A] {
 }
 
 
-class Dao[T <: BaseTable[A], A <: BaseModel]()(implicit val tableQ: TableQuery[T]) extends BaseDao[T,A] with HasDatabaseConfig[JdbcProfile] {
+class Dao[T <: BaseTable[A], A <: BaseModel[A]]()(implicit val tableQ: TableQuery[T]) extends BaseDao[T,A] with HasDatabaseConfig[JdbcProfile] {
   protected lazy val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   import dbConfig.driver.api._
 
@@ -46,7 +44,7 @@ class Dao[T <: BaseTable[A], A <: BaseModel]()(implicit val tableQ: TableQuery[T
   }
 
   def update(rows : Seq[A]): Future[Unit] = {
-    db.run(DBIO.seq((rows.filter(_.isValid).map(r => tableQ.filter(_.id === r.id).update(r))): _*))
+    db.run(DBIO.seq(rows.filter(_.isValid).map(r => tableQ.filter(_.id === r.id).update(r)): _*))
   }
 
   def findById(id : Long): Future[Option[A]] = {
