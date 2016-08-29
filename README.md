@@ -31,53 +31,53 @@ Description
 `POST /<endpoint>/`
 
 Body:
-```json
+```
 {json ecoded object without `id`}
 ```
 
 Success:
-```json
+```
 {json ecoded object}
 ```
 Failure:
-```json
+```
 {"status":"KO","message": "<error message>"}
 ```
 #####Modify existing object
 `PUT /<endpoint>/<id>`
 Body:
-```json
+```
 {json ecoded object}
 ```
 
 Success:
-```json
+```
 {json ecoded object}
 ```
 Failure:
-```json
+```
 {"status":"KO","message": "<error message>"}
 ```
 #####List all objects
 `GET /<endpoint>/`
 
 Success:
-```json
+```
 {"status":"OK","items":[object1, ...]}
 ```
 Failure:
-```json
+```
 {"status":"KO","message": "<error message>"}
 ```
 #####Get object by id
 `GET /<endpoint>/`
 
 Success:
-```json
+```
 {<json ecoded object>}
 ```
 Failure:
-```json
+```
 {"status":"KO","message": "<error message>"}
 ```
 
