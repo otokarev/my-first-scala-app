@@ -15,15 +15,15 @@ Description
 * `/channel_subscriber/`
 ####Objects
 #####Subscriber
-```json
+```
 {"id": <id>, "title": "<title>"}
 ```
 #####Channel
-```json
+```
 {"id": "<id>", "title": "<title>"}
 ```
 #####Subscriber's channel
-```json
+```
 {"id": "<id>", "title": "<title>", "subscriberId": "<subscriber id>", "channelId": "<channel id>", "cfg": "<configs>"}
 ```
 ####Commands
