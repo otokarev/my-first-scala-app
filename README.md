@@ -9,9 +9,10 @@ Description
 ###Web-service with RESTful API.
 
 ####Endpoints
-`/subscriber/`
-`/channel/`
-`/channel_subscriber/`
+
+* `/subscriber/`
+* `/channel/`
+* `/channel_subscriber/`
 ####Objects
 #####Subscriber
 ```json
@@ -19,23 +20,24 @@ Description
 ```
 #####Channel
 ```json
-{"id": <id>, "title": "<title>"}
+{"id": "<id>", "title": "<title>"}
 ```
 #####Subscriber's channel
 ```json
-{"id": <id>, "title": "<title>", "subscriberId": <subscriber id>, "channelId": <channel id>, "cfg": "<configs>"}
+{"id": "<id>", "title": "<title>", "subscriberId": "<subscriber id>", "channelId": "<channel id>", "cfg": "<configs>"}
 ```
 ####Commands
 #####Create new object
 `POST /<endpoint>/`
+
 Body:
 ```json
-{<json ecoded object without `id`>}
+{json ecoded object without `id`}
 ```
 
 Success:
 ```json
-{<json ecoded object>}
+{json ecoded object}
 ```
 Failure:
 ```json
@@ -45,12 +47,12 @@ Failure:
 `PUT /<endpoint>/<id>`
 Body:
 ```json
-{<json ecoded object>}
+{json ecoded object}
 ```
 
 Success:
 ```json
-{<json ecoded object>}
+{json ecoded object}
 ```
 Failure:
 ```json
@@ -61,7 +63,7 @@ Failure:
 
 Success:
 ```json
-{"status":"OK","items":[<object1, ...>]}
+{"status":"OK","items":[object1, ...]}
 ```
 Failure:
 ```json
