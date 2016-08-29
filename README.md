@@ -6,15 +6,78 @@ It's the place where i'm training my scala skills
 Description
 -----------
 
-Web-service with RESTful API.
+###Web-service with RESTful API.
 
-Right now one can add `Subscriber` by sending
-
+####Endpoints
+`/subscriber/`
+`/channel/`
+`/channel_subscriber/`
+####Objects
+#####Subscriber
 ```json
-{"title": "<title>"}
+{"id": <id>, "title": "<title>"}
+```
+#####Channel
+```json
+{"id": <id>, "title": "<title>"}
+```
+#####Subscriber's channel
+```json
+{"id": <id>, "title": "<title>", "subscriberId": <subscriber id>, "channelId": <channel id>, "cfg": "<configs>"}
+```
+####Commands
+#####Create new object
+`POST /<endpoint>/`
+Body:
+```json
+{<json ecoded object without `id`>}
 ```
 
-to `POST /subscriber/`
+Success:
+```json
+{<json ecoded object>}
+```
+Failure:
+```json
+{"status":"KO","message": "<error message>"}
+```
+#####Modify existing object
+`PUT /<endpoint>/<id>`
+Body:
+```json
+{<json ecoded object>}
+```
+
+Success:
+```json
+{<json ecoded object>}
+```
+Failure:
+```json
+{"status":"KO","message": "<error message>"}
+```
+#####List all objects
+`GET /<endpoint>/`
+
+Success:
+```json
+{"status":"OK","items":[<object1, ...>]}
+```
+Failure:
+```json
+{"status":"KO","message": "<error message>"}
+```
+#####Get object by id
+`GET /<endpoint>/`
+
+Success:
+```json
+{<json ecoded object>}
+```
+Failure:
+```json
+{"status":"KO","message": "<error message>"}
+```
 
 Out of scope for now
 --------------------
@@ -23,11 +86,14 @@ Out of scope for now
 
 TODO
 ----
+1. Implement extra validation for `POST /channel_subscriber/` to check releations with others models
+1. Move Dao to daos
+1. Move `implicit itemFormat: Format[]` in controllers to `tables` (or `models`?)
 1. Authentication/Authorization
-2. Sessions
-3. Checkout Play's deployment procedures
-4. Implement simple event-cracker app
-5. Unit tests for testing with Kafka(?)
+1. Sessions
+1. Checkout Play's deployment procedures
+1. Implement simple event-cracker app
+1. Unit tests for testing with Kafka(?)
 
 Debatable topics
 ----------------
@@ -46,8 +112,7 @@ Debatable topics
      val db = databaseApi.database("default")
      Evolutions.applyEvolutions(db);
    ```
-3. models/Subscriber: why not to hide SubscriberModel in Subscriber.Model?
-4. controllers/SubscriberControllers: is it the best place for:
+3. controllers/SubscriberControllers: is it the best place for:
    
    ```scala
      implicit val locationFormat: Format[SubscriberModel] = (
