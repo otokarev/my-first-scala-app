@@ -13,7 +13,9 @@ Description
 * `/subscriber/`
 * `/channel/`
 * `/channel_subscriber/`
+
 ####Objects
+
 #####Subscriber
 ```
 {"id": <id>, "title": "<title>"}
