@@ -2,7 +2,8 @@ package controllers
 
 import javax.inject._
 
-import models.{BaseDao, BaseModel}
+import daos.BaseDao
+import models.BaseModel
 import play.api.libs.json._
 import play.api.mvc._
 import tables.Tables.BaseTable
@@ -11,9 +12,9 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject()(service: BaseDao[T, M])(implicit exec: ExecutionContext) extends Controller {
+abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject()(service: BaseDao[T, M], format: Format[M])(implicit exec: ExecutionContext) extends Controller {
 
-  implicit val itemFormat: Format[M]
+  implicit val itemFormat = format
 
   implicit val seqM2JsValueWrapper = new Writes[Seq[M]] {
     def writes(a: Seq[M]) = Json.toJson(a)

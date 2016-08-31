@@ -1,7 +1,7 @@
-import com.google.inject.{AbstractModule, Provides}
 import java.time.Clock
 
-import models._
+import com.google.inject.{AbstractModule, Provides}
+import play.api.libs.json.Format
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -14,6 +14,9 @@ import models._
  * configuration file.
  */
 class Module extends AbstractModule {
+  import daos._
+  import formats.Formats._
+  import models._
   import tables.Tables._
 
   override def configure() = {
@@ -24,4 +27,8 @@ class Module extends AbstractModule {
   @Provides def subscriberDao : BaseDao[SubscriberTable, SubscriberModel] = new Dao[SubscriberTable,SubscriberModel]
   @Provides def channelDao : BaseDao[ChannelTable, ChannelModel] = new Dao[ChannelTable,ChannelModel]
   @Provides def channelSubscriberDao : BaseDao[ChannelSubscriberTable, ChannelSubscriberModel] = new Dao[ChannelSubscriberTable,ChannelSubscriberModel]
+
+  @Provides def subscriberFormat : Format[SubscriberModel] = format4Subscriber
+  @Provides def channelFormat : Format[ChannelModel] = format4Channel
+  @Provides def channelSubscriberFormat :  Format[ChannelSubscriberModel] = format4ChannelSubscriber
 }

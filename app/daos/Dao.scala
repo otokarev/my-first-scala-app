@@ -1,14 +1,15 @@
-package models
+package daos
 
-import tables.Tables._
+import models.BaseModel
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
 import slick.lifted.{CanBeQueryCondition, TableQuery}
+import tables.Tables._
 
 import scala.concurrent.Future
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 
 trait BaseDao[T,A] {
