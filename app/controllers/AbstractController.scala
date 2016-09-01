@@ -24,14 +24,14 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
     request.body.validate[M].fold(
       errors => {
         Future {
-          BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors))).as("text/json")
+          BadRequest(Json.obj("status" -> "KO", "errors" -> JsError.toJson(errors))).as("text/json")
         }
       },
       r => {
         service.insert(r) map { id =>
           Ok(Json.obj("status" -> "OK", "message" -> "object created", "object" -> r.copy(id=Some(id)))).as("text/json")
         } recover {
-          case e => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+          case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
         }
       })
   }
@@ -41,7 +41,7 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
       .fold(
         errors => {
           Future {
-            BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors))).as("text/json")
+            BadRequest(Json.obj("status" -> "KO", "errors" -> JsError.toJson(errors))).as("text/json")
           }
         },
         (r: M) => {
@@ -49,7 +49,7 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
           service.update(cr) map { c =>
             Ok(Json.obj("status" -> "OK", "message" -> "object replaced")).as("text/json")
           } recover {
-            case e => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+            case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
           }
         })
   }}
@@ -57,14 +57,14 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
     service.deleteById(id) map { r =>
       Ok(Json.obj("status" -> "OK", "message" -> "object deleted")).as("text/json")
     } recover {
-      case e => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+      case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
     }
   }
   def get(id: Long) = Action.async { request =>
     service.findById(id) map { r =>
       Ok(Json.toJson(r)).as("text/json")
     } recover {
-      case e => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+      case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
     }
   }
   def list() = Action { request =>
@@ -74,7 +74,7 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
       Ok(Json.obj("status" -> "OK", "items" -> rs)).as("text/json")
     } match {
       case Success(r) => r
-      case Failure(e) => InternalServerError(Json.obj("status" -> "KO", "message" -> e.getMessage)).as("text/json")
+      case Failure(e) => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
     }
   }
 }

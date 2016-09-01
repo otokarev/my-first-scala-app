@@ -28,8 +28,8 @@ object Tables extends HasDatabaseConfig[JdbcProfile] {
   class ChannelSubscriberTable(tag: Tag) extends BaseTable[ChannelSubscriberModel](tag, "channel_subscriber") {
 
     def title = column[String]("title")
-    def channelId = column[Long]("channelId")
-    def subscriberId = column[Long]("subscriberId")
+    def channelId = column[Long]("channel_id")
+    def subscriberId = column[Long]("subscriber_id")
     def cfg = column[String]("cfg")
 
     def * = (id.?, title, channelId, subscriberId, cfg) <> (ChannelSubscriberModel.tupled, ChannelSubscriberModel.unapply)

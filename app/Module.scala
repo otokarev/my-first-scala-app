@@ -24,7 +24,7 @@ class Module extends AbstractModule {
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }
 
-  @Provides def subscriberDao : BaseDao[SubscriberTable, SubscriberModel] = new Dao[SubscriberTable,SubscriberModel]
+  @Provides def subscriberDao : BaseDao[SubscriberTable, SubscriberModel]= new Dao[SubscriberTable,SubscriberModel]
   @Provides def channelDao : BaseDao[ChannelTable, ChannelModel] = new Dao[ChannelTable,ChannelModel]
   @Provides def channelSubscriberDao : BaseDao[ChannelSubscriberTable, ChannelSubscriberModel] = new Dao[ChannelSubscriberTable,ChannelSubscriberModel]
 

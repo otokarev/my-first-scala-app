@@ -1,14 +1,14 @@
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test._
-import play.api.test.Helpers._
 import org.scalatestplus.play._
 import play.api.db.DBApi
 import play.api.db.evolutions.Evolutions
-import play.api.{Application, Configuration, Play}
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
+import play.api.test.Helpers._
+import play.api.test._
+import play.api.{Application, Configuration}
 
 /**
   * Add your spec here.
@@ -22,12 +22,12 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
 
   lazy val databaseApi = app.injector.instanceOf[DBApi]
   val db = databaseApi.database("default")
-  Evolutions.applyEvolutions(db);
+  Evolutions.applyEvolutions(db)
 
   "Subscriber" should {
 
     "create new instance with title=First" in {
-      val r1 = route(app, FakeRequest(POST, "/subscriber").withJsonBody(Json.obj(
+      val r1 = route(app, FakeRequest(POST, "/subscriber/").withJsonBody(Json.obj(
         "title" -> "First"
       ))).get
 
@@ -70,8 +70,23 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       ((Json.parse(contentAsString(r)) \ "items")(0) \ "title").as[String] mustEqual "Default"
       ((Json.parse(contentAsString(r)) \ "items")(0) \ "id").as[Long] mustEqual 1
     }
-  }
 
+    "Check POST /channel-subscriber with wrong channelId" in {
+      val r = route(app, FakeRequest(POST, "/channel-subscriber/").withJsonBody(Json.obj(
+        "title" -> "Second", "channelId" -> 3, "subscriberId" -> 1, "cfg" -> "config1"
+      ))).get
+      println(contentAsString(r))
+      ((Json.parse(contentAsString(r)) \ "errors" \ "obj.channelId" )(0) \ "msg")(0).as[String] mustEqual "object not found"
+    }
+
+    "Check POST /channel-subscriber with wrong subscriberId" in {
+      val r = route(app, FakeRequest(POST, "/channel-subscriber/").withJsonBody(Json.obj(
+        "title" -> "Second", "channelId" -> 1, "subscriberId" -> 2, "cfg" -> "config1"
+      ))).get
+      println(contentAsString(r))
+      ((Json.parse(contentAsString(r)) \ "errors" \ "obj.subscriberId" )(0) \ "msg")(0).as[String] mustEqual "object not found"
+    }
+  }
 
 }
 
