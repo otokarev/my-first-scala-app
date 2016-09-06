@@ -90,14 +90,12 @@ Out of scope for now
 
 TODO
 ----
-1. Implement extra validation for `POST /channel_subscriber/` to check releations with others models
-1. Move Dao to daos
+1. Draw a schema of actors interactions
+1. Create type alias for channel/subscriber IDs `Long`
 1. Move `implicit itemFormat: Format[]` in controllers to `tables` (or `models`?)
 1. Authentication/Authorization
 1. Sessions
 1. Checkout Play's deployment procedures
-1. Implement simple event-cracker app
-1. Unit tests for testing with Kafka(?)
 
 Debatable topics
 ----------------
