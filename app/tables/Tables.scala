@@ -21,8 +21,9 @@ object Tables extends HasDatabaseConfig[JdbcProfile] {
   class ChannelTable(tag: Tag) extends BaseTable[ChannelModel](tag, "channel") {
 
     def title = column[String]("title")
+    def actorClass = column[String]("actor_class")
 
-    def * = (id.?, title) <> (ChannelModel.tupled, ChannelModel.unapply)
+    def * = (id.?, title, actorClass) <> (ChannelModel.tupled, ChannelModel.unapply)
   }
 
   class ChannelSubscriberTable(tag: Tag) extends BaseTable[ChannelSubscriberModel](tag, "channel_subscriber") {

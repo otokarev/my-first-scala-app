@@ -97,6 +97,10 @@ TODO
 1. Sessions
 1. Checkout Play's deployment procedures
 
+Questions
+---------
+1. How to create actors of required type on demand?
+
 Debatable topics
 ----------------
 1. test/ApplicationSpec: probably it is not best way to run test against `test` database configs by doing that:

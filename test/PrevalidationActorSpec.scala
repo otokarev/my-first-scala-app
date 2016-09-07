@@ -50,13 +50,13 @@ class PrevalidationActorSpec(_system: ActorSystem) extends TestKit(_system: Acto
     "accept events with correct channel and subscriber ids" in {
       val parentProbe = TestProbe()
       val channelMsgRouterProbe = TestProbe()
-      val sourceRef = system.actorOf(Props(new PrevalidationActor(parent=parentProbe.ref, out=channelMsgRouterProbe.ref)))
+      val sourceRef = system.actorOf(PrevalidationActor.props(parent=parentProbe.ref, out=channelMsgRouterProbe.ref))
 
       val sentMsg = FakeSource.get()
       sourceRef ! sentMsg
       channelMsgRouterProbe.expectMsg(500 millis, sentMsg)
     }
-    "rise RuntimeException on wrong message" in {
+    "send log error on malformed message" in {
 
       val parentProbe = TestProbe()
       val channelMsgRouterProbe = TestProbe()
@@ -64,12 +64,6 @@ class PrevalidationActorSpec(_system: ActorSystem) extends TestKit(_system: Acto
       EventFilter.error(message = "Wrong message received", occurrences = 1) intercept {
         sourceRef ! "BAD MESSAGE"
       }
-    }
-    "filter out events with bad channelId" in {
-
-    }
-    "filter out events with bad subscriberId" in {
-
     }
 
   }
@@ -83,9 +77,9 @@ object Utils {
     SubscriberModel(Option(3), "Subscriber #3")
   )
   val channelList = List(
-    ChannelModel(Option(1), "Channel #1"),
-    ChannelModel(Option(2), "Channel #2"),
-    ChannelModel(Option(3), "Channel #3")
+    ChannelModel(Option(1), "Channel #1", "actors.workers.DummyActor"),
+    ChannelModel(Option(2), "Channel #2", "actors.workers.DummyActor"),
+    ChannelModel(Option(3), "Channel #3", "actors.workers.DummyActor")
   )
   val channelSubscriberList = List(
     ChannelSubscriberModel(id = Option(1),  title = "Channel for subscriber", subscriberId = 1, channelId = 3, cfg = ""),

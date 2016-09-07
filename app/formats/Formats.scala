@@ -18,7 +18,8 @@ object Formats {
 
   def format4Channel: Format[ChannelModel] = (
     (JsPath \ "id").formatNullable[Long] and
-      (JsPath \ "title").format[String](minLength[String](1))
+      (JsPath \ "title").format[String](minLength[String](1)) and
+      (JsPath \ "actorClass").format[String](minLength[String](1))
     )(ChannelModel.apply, unlift(ChannelModel.unapply))
 
   val write4ChannelSubscriber: Writes[ChannelSubscriberModel] = (
