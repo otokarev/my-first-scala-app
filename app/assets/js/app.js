@@ -1,30 +1,41 @@
 define([
     'angular',
     'config',
-    'controllers/HeaderController',
-    'controllers/ChannelsController',
-    'controllers/ChannelSubscribersController',
-    'controllers/SubscribersController',
-    'controllers/DashboardController',
-    'controllers/EventsController'
+    'services/Channels',
+    'services/Subscribers',
+    'ctrls/HeaderCtrl',
+    'ctrls/ChannelsCtrl',
+    'ctrls/ChannelSubscribersCtrl',
+    'ctrls/SubscribersCtrl',
+    'ctrls/DashboardCtrl',
+    'ctrls/EventsCtrl',
+    'ng-table'
 ], function(angular,
     config,
-    HeaderController,
-    ChannelsController,
-    ChannelSubscribersController,
-    SubscribersController,
-    DashboardController,
-    EventsController
+    Channels,
+    Subscribers,
+    HeaderCtrl,
+    ChannelsCtrl,
+    ChannelSubscribersCtrl,
+    SubscribersCtrl,
+    DashboardCtrl,
+    EventsCtrl
 ) {
   'use strict';
 
-  var m = angular.module('app', ['ngRoute']);
+  var m = angular.module('app', ['ngRoute', 'ngTable']);
+  m.constant("utility", {
+    baseAddress: "http://localhost:9000/"
+  });
   m.config(config);
-  m.controller('HeaderCtrl', HeaderController);
-  m.controller('DashboardCtrl', DashboardController);
-  m.controller('EventsCtrl', EventsController);
-  m.controller('SubscribersCtrl', SubscribersController);
-  m.controller('ChannelsCtrl', ChannelsController);
-  m.controller('ChannelSubscribersCtrl', ChannelSubscribersController);
+  m.factory('Channels', Channels);
+  m.factory('Subscribers', Subscribers);
+  m.controller('HeaderCtrl', HeaderCtrl);
+  m.controller('DashboardCtrl', DashboardCtrl);
+  m.controller('EventsCtrl', EventsCtrl);
+  m.controller('SubscribersCtrl', SubscribersCtrl);
+  m.controller('ChannelsCtrl', ChannelsCtrl);
+  m.controller('ChannelSubscribersCtrl', ChannelSubscribersCtrl);
+
   return m;
 });

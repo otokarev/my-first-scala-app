@@ -1,1 +1,11 @@
-<h1>Channels</h1>
+<div class="jumobtron">
+    <div class="container">
+        <h1>Channels</h1>
+        <table ng-table="tableParams" class="table" show-filter="true">
+            <tr ng-repeat="v in data">
+                <td title="'ID'" filter="{ id: 'number'}" sortable="'id'">{{v.id}}</td>
+                <td title="'Title'" filter="{ title: 'text'}" sortable="'title'">{{v.title}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
