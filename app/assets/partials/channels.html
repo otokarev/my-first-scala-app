@@ -19,5 +19,4 @@
         </table>
     </div>
 </div>
-<ec-modal visible="{{showAddItemDialog}}" title="Add new channel"><ec-channel-form/></ec-modal>
-<ec-modal visible="{{showUpdateItemDialog}}" title="Update channel"><ec-channel-form/></ec-modal>
+<ec-channel-modal item="item" on-save="onSaveItemDialog" visible='showItemDialog' id="item-add-dialog" title="titleDialog"></ec-channel-modal>

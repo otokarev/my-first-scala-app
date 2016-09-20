@@ -6,8 +6,7 @@ define([
     controllers.controller('ChannelsCtrl', ['$scope', 'NgTableParams', '$resource', 'Channels', function($scope, NgTableParams, $resource, Channels) {
         var self = this;
         $scope.hideErrorMessage = true;
-        $scope.showAddItemDialog = false;
-        $scope.showUpdateItemDialog = false;
+        $scope.showItemDialog = false;
 
         $scope.tableParams = new NgTableParams({}, {
             getData: function(params) {
@@ -21,12 +20,14 @@ define([
          });
 
          $scope.addItem = function () {
-            $scope.showAddItemDialog = true;
-//            Channels.save({title: $scope.title, actorClass: $scope.actorClass}).$promise.then(function (data) {
-//                $scope.title = $scope.actorClass = '';showAddItemDialog
-//            }, function (error) {
-//                showError(error);
-//            });
+            $scope.showItemDialog = true;
+            $scope.titleDialog = "Add new Channel";
+            $scope.item = {title: '', actorClass: ''};
+            $scope.onSaveItemDialog = function (item) {return $scope.asyncAddItem(item);};
+         };
+
+         $scope.asyncAddItem = function (item) {
+            return Channels.save(item).$promise;
          };
 
          $scope.removeItem = function (v) {
@@ -37,13 +38,15 @@ define([
             });
          };
 
-         $scope.editItem = function () {
-            $scope.showUpdateItemDialog = true;
-//            Channels.save({id: $scope.itemId, title: $scope.title, actorClass: $scope.actorClass}).$promise.then(function (data) {
-//                $scope.title = $scope.actorClass = '';
-//            }, function (error) {
-//                showError(error);
-//            });
+         $scope.updateItem = function (item) {
+            $scope.showItemDialog = true;
+            $scope.titleDialog = "Update Channel";
+            $scope.item = item;
+            $scope.onSaveItemDialog = function (item) {return $scope.asyncUpdateItem(item);};
+         };
+
+         $scope.asyncUpdateItem = function (item) {
+            return Channels.save(item).$promise;
          };
 
          var showError = function (err) {
