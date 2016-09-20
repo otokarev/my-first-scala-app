@@ -1,0 +1,6 @@
+define([
+    './Channels',
+    './Subscribers'
+], function () {
+
+});

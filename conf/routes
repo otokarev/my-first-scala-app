@@ -8,15 +8,26 @@ GET    /                            controllers.FrontendController.index
 GET   /jsroutes.js                  controllers.FrontendController.jsRoutes()
 
 # Subscribers' controller
+GET     /channel                    controllers.ChannelController.list
 GET     /channel/                   controllers.ChannelController.list
+GET     /channel/:id                controllers.ChannelController.get(id: Long)
+POST    /channel                    controllers.ChannelController.post
+POST    /channel/                   controllers.ChannelController.post
+PUT     /channel/:id                controllers.ChannelController.put(id: Long)
+DELETE  /channel/:id                controllers.ChannelController.delete(id: Long)
 
+GET     /subscriber                 controllers.SubscriberController.list
 GET     /subscriber/                controllers.SubscriberController.list
 GET     /subscriber/:id             controllers.SubscriberController.get(id: Long)
+POST    /subscriber                 controllers.SubscriberController.post
 POST    /subscriber/                controllers.SubscriberController.post
 PUT     /subscriber/:id             controllers.SubscriberController.put(id: Long)
 DELETE  /subscriber/:id             controllers.SubscriberController.delete(id: Long)
 
+GET     /channel-subscriber         controllers.ChannelSubscriberController.list
+GET     /channel-subscriber/        controllers.ChannelSubscriberController.list
 GET     /channel-subscriber/:id     controllers.ChannelSubscriberController.get(id: Long)
+POST    /channel-subscriber         controllers.ChannelSubscriberController.post
 POST    /channel-subscriber/        controllers.ChannelSubscriberController.post
 PUT     /channel-subscriber/:id     controllers.ChannelSubscriberController.put(id: Long)
 DELETE  /channel-subscriber/:id     controllers.ChannelSubscriberController.delete(id: Long)

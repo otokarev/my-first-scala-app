@@ -1,27 +1,39 @@
-define(['underscore'], function (app) {
-    'use strict';
+define(['./module'], function (module) {
+  'use strict';
 
-    var Channels = function ($http, utility) {
-         var url = utility.baseAddress + "channel";
-         return {
-             getList: function () {
-                 return $http.get(url);
-             },
-             get: function (v) {
-                 return $http.get(url + "/" + v.id);
-             },
-             add: function (v) {
-                 return $http.post(url, v);
-             },
-             delete: function (v) {
-                 return $http.delete(url + "/" + v.id);
-             },
-             update: function (v) {
-                 return $http.put(url + "/" + v.id, v);
-             }
-         };
-    };
-    Channels.$inject = ['$http', 'utility'];
-
-    return Channels;
+    module.factory('Channels', ['$resource', function ($resource) {
+        return $resource('/channel/:id', {id: '@_id'},
+            {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                },
+                'query': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                },
+                'update': {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                },
+                'save': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                },
+                'delete': {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                }
+            });
+    }]);
 });
