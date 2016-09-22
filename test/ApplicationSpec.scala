@@ -62,18 +62,30 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       ((Json.parse(contentAsString(r4)) \ "items")(0) \ "id").as[Long] mustEqual 1
     }
 
+    "Check that subscriber can be deleted" in {
+      val r1 = route(app, FakeRequest(POST, "/subscriber/").withJsonBody(Json.obj(
+        "title" -> "For delete"
+      ))).get
+
+      println(contentAsString(r1))
+
+      val id = (Json.parse(contentAsString(r1)) \ "object" \ "id").as[Long]
+      val r2 = route(app, FakeRequest(DELETE, s"/subscriber/$id")).get
+      status(r2) mustBe OK
+    }
+
     "Check that under /channel/ our `Default` channel is available" in {
       val r = route(app, FakeRequest(GET, "/channel/")).get
       println(contentAsString(r))
 
       status(r) mustBe OK
-      ((Json.parse(contentAsString(r)) \ "items")(0) \ "title").as[String] mustEqual "Default"
+      ((Json.parse(contentAsString(r)) \ "items")(0) \ "title").as[String] mustEqual "Default - 01"
       ((Json.parse(contentAsString(r)) \ "items")(0) \ "id").as[Long] mustEqual 1
     }
 
     "Check POST /channel-subscriber with wrong channelId" in {
       val r = route(app, FakeRequest(POST, "/channel-subscriber/").withJsonBody(Json.obj(
-        "title" -> "Second", "channelId" -> 3, "subscriberId" -> 1, "cfg" -> "config1"
+        "title" -> "Second", "channelId" -> -1, "subscriberId" -> 1, "cfg" -> "config1"
       ))).get
       println(contentAsString(r))
       ((Json.parse(contentAsString(r)) \ "errors" \ "obj.channelId" )(0) \ "msg")(0).as[String] mustEqual "object not found"

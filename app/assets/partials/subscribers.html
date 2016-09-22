@@ -1,1 +1,22 @@
-<h1>Subscribers</h1>
+<div ng-hide="hideErrorMessage" class="alert alert-danger">
+    <button type="button" class="close" ng-click="closeError()">&times;</button>
+    <strong>ERROR!</strong> {{errorMessage}}
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1>Channels</h1>
+        <div class="btn-group">
+            <button class="btn btn-success" ng-click="addItem()">Create New</button>
+        </div>
+        <table ng-table="tableParams" class="table table-striped table-hover " show-filter="true">
+            <tr ng-repeat="v in $data">
+                <td title="'ID'" filter="{ id: 'number'}" sortable="'id'">{{v.id}}</td>
+                <td title="'Title'" filter="{ title: 'text'}" sortable="'title'">{{v.title}}</td>
+                <td><button class="btn btn-primary" ng-click="updateItem(v)">Update</button></td>
+                <td><button class="btn btn-danger" ng-click="removeItem(v)">Remove</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<ec-form-modal visible='showItemDialog' title="titleDialog"><ec-item-form type="subscriber" item="item" on-submit="onSaveItemDialog"/></ec-form-modal>
+

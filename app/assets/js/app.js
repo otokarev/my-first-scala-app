@@ -1,30 +1,20 @@
 define([
     'angular',
-    'config',
-    'controllers/HeaderController',
-    'controllers/ChannelsController',
-    'controllers/ChannelSubscribersController',
-    'controllers/SubscribersController',
-    'controllers/DashboardController',
-    'controllers/EventsController'
-], function(angular,
-    config,
-    HeaderController,
-    ChannelsController,
-    ChannelSubscribersController,
-    SubscribersController,
-    DashboardController,
-    EventsController
-) {
+    'controllers/index',
+    'directives/index',
+    'services/index',
+    'ng-table',
+    'angular-resource'
+], function(angular) {
   'use strict';
+  console.log("APP!");
 
-  var m = angular.module('app', ['ngRoute']);
-  m.config(config);
-  m.controller('HeaderCtrl', HeaderController);
-  m.controller('DashboardCtrl', DashboardController);
-  m.controller('EventsCtrl', EventsController);
-  m.controller('SubscribersCtrl', SubscribersController);
-  m.controller('ChannelsCtrl', ChannelsController);
-  m.controller('ChannelSubscribersCtrl', ChannelSubscribersController);
-  return m;
+  return angular.module('app', [
+    'app.directives',
+    'app.services',
+    'ngRoute',
+    'ngTable',
+    'ngResource',
+    'app.controllers'
+  ]);
 });

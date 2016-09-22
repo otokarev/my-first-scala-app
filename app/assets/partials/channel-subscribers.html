@@ -4,7 +4,7 @@
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
-        <h1>Channels</h1>
+        <h1>Subscriber's Channels</h1>
         <div class="btn-group">
             <button class="btn btn-success" ng-click="addItem()">Create New</button>
         </div>
@@ -12,11 +12,14 @@
             <tr ng-repeat="v in $data">
                 <td title="'ID'" filter="{ id: 'number'}" sortable="'id'">{{v.id}}</td>
                 <td title="'Title'" filter="{ title: 'text'}" sortable="'title'">{{v.title}}</td>
-                <td title="'Actor Class'" filter="{ actorClass: 'text'}" sortable="'actorClass'">{{v.actorClass}}</td>
+                <td title="'Subscriber ID'" filter="{ subscriberId: 'text'}" sortable="'subscriberId'">{{v.subscriberId}}</td>
+                <td title="'Channel ID'" filter="{ channelId: 'text'}" sortable="'channelId'">{{v.channelId}}</td>
+                <td title="'Configuration'" filter="{ cfg: 'text'}" sortable="'cfg'">{{v.cfg}}</td>
                 <td><button class="btn btn-primary" ng-click="updateItem(v)">Update</button></td>
                 <td><button class="btn btn-danger" ng-click="removeItem(v)">Remove</button></td>
             </tr>
         </table>
     </div>
 </div>
-<ec-form-modal visible='showItemDialog' title="titleDialog"><ec-item-form type="channel" item="item" on-submit="onSaveItemDialog"/></ec-form-modal>
+<ec-form-modal visible='showItemDialog' title="titleDialog"><ec-item-form type="subscriber-channel" item="item" on-submit="onSaveItemDialog"/></ec-form-modal>
+

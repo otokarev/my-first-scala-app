@@ -2,7 +2,7 @@
   'use strict';
 
   requirejs.config({
-    packages: ['common', 'home', 'dashboard', 'services'],
+    packages: [],
     shim: {
       'jsRoutes': {
         deps: [],
@@ -14,6 +14,8 @@
       },
       'angular-route': ['angular'],
       'angular-cookies': ['angular'],
+      'angular-resource': ['angular'],
+      'ng-table': ['angular'],
       'bootstrap': ['jquery']
     },
     paths: {
@@ -23,6 +25,8 @@
       'angular': ['../lib/angularjs/angular'],
       'angular-route': ['../lib/angularjs/angular-route'],
       'angular-cookies': ['../lib/angularjs/angular-cookies'],
+      'angular-resource': ['../lib/angularjs/angular-resource'],
+      'ng-table': ['../lib/ng-table/dist/ng-table'],
       'bootstrap': ['../lib/bootstrap/js/bootstrap'],
       'd3' : ['../lib/d3js/d3'],
       'jsRoutes': ['/jsroutes']
@@ -37,10 +41,13 @@
     'angular',
     'angular-cookies',
     'angular-route',
+    'angular-resource',
+    'ng-table',
     'jquery',
     'bootstrap',
     'd3',
-    'app'
+    'app',
+    'routes'
    ],
     function (angular) {
       angular.bootstrap(document, ['app']);

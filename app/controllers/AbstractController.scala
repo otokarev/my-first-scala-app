@@ -53,7 +53,7 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
           }
         })
   }}
-  def delete(id: Long) = Action.async(BodyParsers.parse.json) { request =>
+  def delete(id: Long) = Action.async { request =>
     service.deleteById(id) map { r =>
       Ok(Json.obj("status" -> "OK", "message" -> "object deleted")).as("text/json")
     } recover {
