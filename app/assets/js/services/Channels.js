@@ -2,7 +2,7 @@ define(['./module'], function (module) {
   'use strict';
 
     module.factory('Channels', ['$resource', function ($resource) {
-        return $resource('/channel/:id', {id: '@_id'},
+        return $resource('/channel/:id', {id: '@id'},
             {
                 'get': {
                     method: 'GET',

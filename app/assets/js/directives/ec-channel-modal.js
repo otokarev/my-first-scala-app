@@ -17,13 +17,13 @@ define(['./module'], function (module) {
                             '<div class="form-group">' +
                                 '<label for="title" class="col-lg-2 control-label">Title</label>' +
                                 '<div class="col-lg-10">' +
-                                    '<input class="form-control" id="title" placeholder="Title" type="text" value="{{item.title}}">' +
+                                    '<input class="form-control" id="title" placeholder="Title" type="text" ng-model="item.title">' +
                                 '</div>' +
                             '</div>' +
                             '<div class="form-group">' +
                                 '<label for="actorClass" class="col-lg-2 control-label">Actor Class</label>' +
                                 '<div class="col-lg-10">' +
-                                    '<input class="form-control" id="actorClass" placeholder="Actor Class" type="text" value="{{item.actorClass}}">' +
+                                    '<input class="form-control" id="actorClass" placeholder="Actor Class" type="text" ng-model="item.actorClass">' +
                                 '</div>' +
                             '</div>' +
                         '</fieldset>' +
@@ -54,6 +54,7 @@ define(['./module'], function (module) {
                 $scope.item = undefined;
             };
             $scope.save = function () {
+                console.log($scope.item);
                 $scope.onSave($scope.item).then(function (data) {
                     console.log("Save: ");
                     console.log($scope.item);

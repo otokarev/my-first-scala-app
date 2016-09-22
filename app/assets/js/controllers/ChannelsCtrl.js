@@ -27,7 +27,9 @@ define([
          };
 
          $scope.asyncAddItem = function (item) {
-            return Channels.save(item).$promise;
+            return Channels.save(item).$promise.finally(function (result) {
+                $scope.tableParams.reload();
+            });
          };
 
          $scope.removeItem = function (v) {
@@ -46,7 +48,9 @@ define([
          };
 
          $scope.asyncUpdateItem = function (item) {
-            return Channels.save(item).$promise;
+            return Channels.update(item).$promise.finally(function (result) {
+                $scope.tableParams.reload();
+            });
          };
 
          var showError = function (err) {
