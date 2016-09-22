@@ -1,6 +1,6 @@
 define([
-    './ec-channel-modal'
+    './ec-form-modal',
+    './ec-item-form'
 ], function () {
 
-  console.log("Dir INDEX OK!");
 });

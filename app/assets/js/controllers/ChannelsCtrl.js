@@ -19,18 +19,27 @@ define([
             }
          });
 
-         $scope.addItem = function () {
+        $scope.addItem = function () {
             $scope.showItemDialog = true;
             $scope.titleDialog = "Add new Channel";
             $scope.item = {title: '', actorClass: ''};
-            $scope.onSaveItemDialog = function (item) {return $scope.asyncAddItem(item);};
-         };
+            $scope.onSaveItemDialog = function (item) {
+                return Channels.save(item).$promise.finally(function (result) {
+                    $scope.tableParams.reload();
+                });
+            };
+        };
 
-         $scope.asyncAddItem = function (item) {
-            return Channels.save(item).$promise.finally(function (result) {
-                $scope.tableParams.reload();
-            });
-         };
+        $scope.updateItem = function (item) {
+            $scope.showItemDialog = true;
+            $scope.titleDialog = "Update Channel";
+            $scope.item = item;
+            $scope.onSaveItemDialog = function (item) {
+                return Channels.update(item).$promise.finally(function (result) {
+                    $scope.tableParams.reload();
+                });
+            };
+        };
 
          $scope.removeItem = function (v) {
             Channels.delete({id: v.id}).$promise.then(function (data) {
@@ -40,22 +49,7 @@ define([
             });
          };
 
-         $scope.updateItem = function (item) {
-            $scope.showItemDialog = true;
-            $scope.titleDialog = "Update Channel";
-            $scope.item = item;
-            $scope.onSaveItemDialog = function (item) {return $scope.asyncUpdateItem(item);};
-         };
-
-         $scope.asyncUpdateItem = function (item) {
-            return Channels.update(item).$promise.finally(function (result) {
-                $scope.tableParams.reload();
-            });
-         };
-
          var showError = function (err) {
-            console.log("Show error");
-            console.log(err.statusText);
             $scope.errorMessage = err.statusText;
             $scope.hideErrorMessage = false;
 

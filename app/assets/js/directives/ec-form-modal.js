@@ -1,7 +1,7 @@
 define(['./module'], function (module) {
   'use strict';
 
-  module.directive('ecChannelModal', function () {
+  module.directive('ecFormModal', function () {
       return {
         template:
           '<div class="modal">' +
@@ -12,22 +12,6 @@ define(['./module'], function (module) {
                   '<h4 class="modal-title">{{title}}</h4>' +
                 '</div>' +
                 '<div class="modal-body" ng-transclude>' +
-                    '<form class="form-horizontal">' +
-                        '<fieldset>' +
-                            '<div class="form-group">' +
-                                '<label for="title" class="col-lg-2 control-label">Title</label>' +
-                                '<div class="col-lg-10">' +
-                                    '<input class="form-control" id="title" placeholder="Title" type="text" ng-model="item.title">' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="actorClass" class="col-lg-2 control-label">Actor Class</label>' +
-                                '<div class="col-lg-10">' +
-                                    '<input class="form-control" id="actorClass" placeholder="Actor Class" type="text" ng-model="item.actorClass">' +
-                                '</div>' +
-                            '</div>' +
-                        '</fieldset>' +
-                    '</form>' +
                 '</div>' +
                 '<div class="modal-footer">' +
                   '<button type="button" class="btn btn-default" ng-click="close()">Close</button>' +
@@ -41,33 +25,23 @@ define(['./module'], function (module) {
         replace: true,
         scope: {
             title: '=',
-            item: '=',
-            visible: '=',
-            onSave: '='
+            visible: '='
         },
         controller: function($scope, $element) {
             $scope.close = function () {
-                console.log("Close: ");
-                console.log($scope.item);
                 $($element).modal('hide');
                 $scope.visible = false;
-                $scope.item = undefined;
             };
             $scope.save = function () {
                 console.log($scope.item);
-                $scope.onSave($scope.item).then(function (data) {
-                    console.log("Save: ");
-                    console.log($scope.item);
+                $scope.onChildFormSubmit().then(function (data) {
                     $($element).modal('hide');
                     $scope.visible = false;
-                }, function (error) {
-                    console.log("Save (error): "+error);
                 });
             };
         },
         link: function(scope, element, attrs) {
             scope.$watch('visible', function(value) {
-                console.log("Visible: "+value);
                 if (value === true) {
                     $(element).modal('show');
                 } else {
