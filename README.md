@@ -86,11 +86,12 @@ Failure:
 Out of scope for now
 --------------------
 1. Beautiful RESTful API
-2. GUI
+1. User friendly error handling in GUI 
 
 TODO
 ----
 1. Draw a schema of actors interactions
+1. Split Panel and Back-End in to SBT sub-projects
 1. Create type alias for channel/subscriber IDs `Long`
 1. Move `implicit itemFormat: Format[]` in controllers to `tables` (or `models`?)
 1. Authentication/Authorization

@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "d3js" % "4.2.1",
   "org.webjars" % "underscorejs" % "1.8.3",
   "org.webjars" % "bootstrap" % "3.3.7-1" exclude ("org.webjars", "jquery"),
+  "org.webjars.npm" % "angular-ui-bootstrap" % "2.1.3" exclude ("org.webjars", "jquery"),
   "org.webjars" % "angularjs" % "1.5.8" exclude ("org.webjars", "jquery"),
   "org.webjars" % "bootswatch-yeti" % "3.3.5+4"  exclude ("org.webjars", "jquery"),
   "org.webjars.bower" % "ng-table" % "1.0.0"
