@@ -1,6 +1,6 @@
 define([
     './ec-form-modal',
-    './ec-form-channel-extra',
+    './ec-form-subscriber-channel-extra',
     './ec-item-form'
 ], function () {
 
