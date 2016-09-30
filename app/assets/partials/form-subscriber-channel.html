@@ -1,20 +1,26 @@
-<form class="form-horizontal">
+<form class="form-horizontal" autocomplete="off" >
     <fieldset>
         <div class="form-group">
             <label for="title" class="col-lg-2 control-label">Title</label>
             <div class="col-lg-10">
-                <input class="form-control" id="title" placeholder="Title" type="text" ng-model="item.title">
+                <input class="form-control" id="title" placeholder="Title" type="text" ng-model="item.title" required>
             </div>
             <label for="subscriberId" class="col-lg-2 control-label">Subscriber ID</label>
             <div class="col-lg-10">
-                <input class="form-control" id="subscriberId" placeholder="Subscriber ID" type="number" ng-model="item.subscriberId">
+                <input class="form-control" id="subscriberId" placeholder="Subscriber" type="text" ng-model="selectedSubscriber"
+                       ec-form-subscriber-channel-extra
+                       typeahead-on-select="onSubscriberSelect($item, $model, $label, $event)"
+                       uib-typeahead="opt as opt.title for opt in getSubscriberList($viewValue)"
+                       required
+                />
             </div>
             <label for="channelId" class="col-lg-2 control-label">Channel ID</label>
             <div class="col-lg-10">
-            <input class="form-control" id="channelId" placeholder="Channel" type="text" ng-model="selected"
-                   ec-form-channel-extra
+            <input class="form-control" id="channelId" placeholder="Channel" type="text" ng-model="selectedChannel"
+                   ec-form-subscriber-channel-extra
                    typeahead-on-select="onChannelSelect($item, $model, $label, $event)"
-                   uib-typeahead="opt as opt.title for opt in getChannelOptions()"
+                   uib-typeahead="opt as opt.title for opt in getChannelList($viewValue)"
+                   required
             />
             </div>
             <label for="cfg" class="col-lg-2 control-label">Configuration</label>
