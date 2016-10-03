@@ -1,7 +1,7 @@
-package actors
+package cracker.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import models.EventModel
+import cracker.models.EventModel
 
 class MessageRouterActor(parent: ActorRef) extends Actor with ActorLogging {
 
@@ -11,7 +11,7 @@ class MessageRouterActor(parent: ActorRef) extends Actor with ActorLogging {
     /**
       * TODO: retrieve this string from channel model, or wherever else
       */
-    "actors.workers.DummyActor"
+    "cracker.actors.workers.DummyActor"
   }
 
   override def receive = {
@@ -19,7 +19,7 @@ class MessageRouterActor(parent: ActorRef) extends Actor with ActorLogging {
     case ev @ EventModel(uuid, event, channelId, subscriberId, payload) =>
       log.debug(s"Message received: uuid: $uuid")
 
-      import actors.workers.Utils._
+      import cracker.actors.workers.Utils._
 
       val symbol = resolveSymbol(channelId)
 

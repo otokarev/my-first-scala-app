@@ -1,14 +1,19 @@
 import java.util.UUID
 
-import actors.PrevalidationActor
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{EventFilter, ImplicitSender, TestKit, TestProbe}
 import com.typesafe.config.ConfigFactory
-import models._
-import org.scalatest._
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, WordSpecLike}
 
 import scala.concurrent.duration._
 import scala.util.Random
+import cracker.actors.PrevalidationActor
+
+import cracker.models.EventModel
+import models.ChannelSubscriberModel
+import models.ChannelForSubscriberModel
+import models.ChannelModel
+import models.SubscriberModel
 
 /**
  * SupervisorActor:
@@ -31,7 +36,7 @@ import scala.util.Random
  * - collects errors from other actors
  */
 
-class PrevalidationActorSpec(_system: ActorSystem) extends TestKit(_system: ActorSystem)
+class PrevalidationActorTests(_system: ActorSystem) extends TestKit(_system: ActorSystem)
   with ImplicitSender
   with WordSpecLike
   with BeforeAndAfterAll
@@ -77,9 +82,9 @@ object Utils {
     SubscriberModel(Option(3), "Subscriber #3")
   )
   val channelList = List(
-    ChannelModel(Option(1), "Channel #1", "actors.workers.DummyActor"),
-    ChannelModel(Option(2), "Channel #2", "actors.workers.DummyActor"),
-    ChannelModel(Option(3), "Channel #3", "actors.workers.DummyActor")
+    ChannelModel(Option(1), "Channel #1", "cracker.actors.workers.DummyActor"),
+    ChannelModel(Option(2), "Channel #2", "cracker.actors.workers.DummyActor"),
+    ChannelModel(Option(3), "Channel #3", "cracker.actors.workers.DummyActor")
   )
   val channelSubscriberList = List(
     ChannelSubscriberModel(id = Option(1),  title = "Channel for subscriber", subscriberId = 1, channelId = 3, cfg = ""),

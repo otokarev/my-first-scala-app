@@ -1,10 +1,11 @@
-import actors.MessageRouterActor
 import akka.actor.ActorSystem
 import akka.testkit.{EventFilter, ImplicitSender, TestKit, TestProbe}
-import com.typesafe.config.ConfigFactory
 import org.scalatest._
+import com.typesafe.config.ConfigFactory
 
-class MessageRouterActorSpec(_system: ActorSystem) extends TestKit(_system: ActorSystem)
+import cracker.actors.MessageRouterActor
+
+class MessageRouterActorTests(_system: ActorSystem) extends TestKit(_system: ActorSystem)
   with ImplicitSender
   with WordSpecLike
   with BeforeAndAfterAll

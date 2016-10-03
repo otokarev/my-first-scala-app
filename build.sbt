@@ -1,32 +1,32 @@
-name := """my-first-app"""
+lazy val root = (project in file("."))
+  .settings(
+    name := """event-cracker"""
+  ).aggregate(
+    frontend,
+    cracker
+  )
 
-version := "1.0-SNAPSHOT"
-
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
-
-scalaVersion := "2.11.7"
-
-libraryDependencies ++= Seq(
-  cache,
-  ws,
-  evolutions,
-  "com.typesafe.akka" %% "akka-actor" % "2.4.8",
-  "com.typesafe.akka" %% "akka-testkit" % "2.4.8",
-  "mysql" % "mysql-connector-java" % "5.1.39",
-  "com.typesafe.play" %% "play-slick" % "2.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
-  "org.webjars" % "jquery" % "3.1.0",
-  "org.webjars" % "requirejs" % "2.3.1",
-  "org.webjars" % "d3js" % "4.2.1",
-  "org.webjars" % "underscorejs" % "1.8.3",
-  "org.webjars" % "bootstrap" % "3.3.7-1" exclude ("org.webjars", "jquery"),
-  "org.webjars.npm" % "angular-ui-bootstrap" % "2.1.3" exclude ("org.webjars", "jquery"),
-  "org.webjars" % "angularjs" % "1.5.8" exclude ("org.webjars", "jquery"),
-  "org.webjars" % "bootswatch-yeti" % "3.3.5+4"  exclude ("org.webjars", "jquery"),
-  "org.webjars.bower" % "ng-table" % "1.0.0"
+val commonSettings = Seq(
+  organization := "otokarev@gmail.com",
+  version := "0.1.0",
+  scalaVersion := "2.11.7"
 )
 
+lazy val frontend = (project in file("frontend"))
+  .enablePlugins(PlayScala)
+  .settings(
+    name := "event-cracker-frontend",
+    libraryDependencies ++= (Dependencies.frontend  ++ Seq(cache, ws, evolutions)),
+    fork in run := true,
+    commonSettings
+  )
 
+lazy val cracker = (project in file("cracker"))
+  .settings(
+    name := "event-cracker-cracker",
+    libraryDependencies ++= (Dependencies.cracker),
+    fork in run := true,
+    commonSettings
+  ).dependsOn(frontend % "test->compile")
 
 fork in run := true

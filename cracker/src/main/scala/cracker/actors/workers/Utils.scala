@@ -1,4 +1,4 @@
-package actors.workers
+package cracker.actors.workers
 
 import akka.actor.{Actor, ActorContext, Props}
 

@@ -1,7 +1,7 @@
-package actors.workers
+package cracker.actors.workers
 
 import akka.actor.{Actor, ActorLogging}
-import models.EventModel
+import cracker.models.EventModel
 
 trait WorkerActor extends Actor with ActorLogging {
   def processEvent(ev: EventModel)

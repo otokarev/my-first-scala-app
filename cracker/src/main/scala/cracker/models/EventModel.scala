@@ -1,4 +1,4 @@
-package models
+package cracker.models
 
 import java.util.UUID
 

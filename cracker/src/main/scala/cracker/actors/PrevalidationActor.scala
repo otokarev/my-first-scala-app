@@ -1,7 +1,7 @@
-package actors
+package cracker.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import models.EventModel
+import cracker.models.EventModel
 
 class PrevalidationActor(parent: ActorRef, out: ActorRef) extends Actor with ActorLogging {
   override def receive = {
