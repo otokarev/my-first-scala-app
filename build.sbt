@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
 val commonSettings = Seq(
   organization := "otokarev@gmail.com",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val frontend = (project in file("frontend"))
