@@ -6,6 +6,24 @@ It's the place where i'm training my scala skills
 Description
 -----------
 
+###Tests
+
+####RESTful API
+```
+sbt frontend/test
+```
+
+####Akka Actors System
+```
+sbt cracker/test
+```
+
+####UI Panel
+(unittests are not available, so test it manually on localhost:9000)
+```
+sbt frontend/playRun
+```
+
 ###Web-service with RESTful API.
 
 ####Endpoints
