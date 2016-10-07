@@ -7,14 +7,16 @@ object Dependencies {
     val play = "2.0.2"
   }
 
-  lazy val frontend = common ++ play ++ db ++ webjars ++ tests
+  lazy val frontend = common ++ play ++ webjars ++ tests
   lazy val cracker = common ++ akka ++ tests
+  lazy val daos = common ++ db ++ tests
 
   val common = Seq()
 
   val db = Seq(
     "mysql" % "mysql-connector-java" % "5.1.39",
-    "com.h2database" % "h2" % "1.4.192"
+    "com.h2database" % "h2" % "1.4.192",
+    "com.typesafe.slick" %% "slick" % "3.1.1"
   )
   val play = Seq(
     "com.typesafe.play" %% "play-slick" % Version.play,

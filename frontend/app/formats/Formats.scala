@@ -1,6 +1,5 @@
 package formats
 
-import models.{BaseModel, ChannelModel, ChannelSubscriberModel, SubscriberModel}
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -14,7 +13,9 @@ import scala.concurrent.duration.Duration
 
 object Formats {
   import daos._
-  import tables.Tables._
+  import daos.models._
+  import daos.Tables._
+  import play.api.libs.concurrent.Execution.Implicits._
 
   def format4Channel: Format[ChannelModel] = (
     (JsPath \ "id").formatNullable[Long] and
@@ -41,6 +42,7 @@ object Formats {
 
   def ifObjectExists[T <: BaseTable[M], M <: BaseModel[M]](implicit tq: TableQuery[T]) =
     filterNot[Long](ValidationError("object not found")){id =>
+      import daos._
       val dao = new Dao[T, M]
       val c = dao.findById(id)
       Await.result(c, Duration.Inf).fold[Boolean](true)(o => false)

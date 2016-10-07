@@ -12,6 +12,14 @@ val commonSettings = Seq(
   scalaVersion := "2.11.8"
 )
 
+lazy val daos = (project in file("daos"))
+  .settings(
+    name := "event-cracker-daos",
+    libraryDependencies ++= (Dependencies.daos),
+    fork in run := true,
+    commonSettings
+  )
+
 lazy val frontend = (project in file("frontend"))
   .enablePlugins(PlayScala)
   .settings(
@@ -19,7 +27,8 @@ lazy val frontend = (project in file("frontend"))
     libraryDependencies ++= (Dependencies.frontend  ++ Seq(cache, ws, evolutions)),
     fork in run := true,
     commonSettings
-  )
+  ).dependsOn(daos)
+  .aggregate(daos)
 
 lazy val cracker = (project in file("cracker"))
   .settings(

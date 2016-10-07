@@ -1,12 +1,9 @@
-package tables
+package daos
 
-import models.{ChannelModel, ChannelSubscriberModel, SubscriberModel}
-import play.api.Play
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
-import slick.driver.JdbcProfile
+import daos.models.{ChannelModel, ChannelSubscriberModel, SubscriberModel}
 
-object Tables extends HasDatabaseConfig[JdbcProfile] {
-  protected lazy val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+object Tables {
+  lazy val dbConfig = Utils.getDatabaseConfig
   import dbConfig.driver.api._
 
   abstract class BaseTable[T](tag: Tag, name: String) extends Table[T](tag, name) {

@@ -3,10 +3,10 @@ package controllers
 import javax.inject._
 
 import daos.BaseDao
-import models.BaseModel
+import daos.models._
+import daos.Tables._
 import play.api.libs.json._
 import play.api.mvc._
-import tables.Tables.BaseTable
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}

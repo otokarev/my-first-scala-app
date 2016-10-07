@@ -1,4 +1,4 @@
-package models
+package daos.models
 
 trait BaseModel [T <: BaseModel[T]] {
   val id: Option[Long]

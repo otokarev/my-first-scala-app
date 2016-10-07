@@ -14,19 +14,18 @@ import play.api.libs.json.Format
  * configuration file.
  */
 class Module extends AbstractModule {
-  import daos._
   import formats.Formats._
-  import models._
-  import tables.Tables._
+  import daos.models._
+  import play.api.libs.concurrent.Execution.Implicits._
 
   override def configure() = {
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }
 
-  @Provides def subscriberDao : BaseDao[SubscriberTable, SubscriberModel]= new Dao[SubscriberTable,SubscriberModel]
-  @Provides def channelDao : BaseDao[ChannelTable, ChannelModel] = new Dao[ChannelTable,ChannelModel]
-  @Provides def channelSubscriberDao : BaseDao[ChannelSubscriberTable, ChannelSubscriberModel] = new Dao[ChannelSubscriberTable,ChannelSubscriberModel]
+  @Provides def subscriberDao = daos.subscriberDao
+  @Provides def channelDao = daos.channelDao
+  @Provides def channelSubscriberDao = daos.channelSubscriberDao
 
   @Provides def subscriberFormat : Format[SubscriberModel] = format4Subscriber
   @Provides def channelFormat : Format[ChannelModel] = format4Channel

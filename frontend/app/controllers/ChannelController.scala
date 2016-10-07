@@ -2,10 +2,10 @@ package controllers
 
 import javax.inject._
 
-import daos.BaseDao
-import models.ChannelModel
+import daos._
+import daos.models._
+import daos.Tables._
 import play.api.libs.json._
-import tables.Tables.ChannelTable
 
 import scala.concurrent.ExecutionContext
 

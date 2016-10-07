@@ -18,7 +18,7 @@ import play.api.{Application, Configuration}
 class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
-      .configure(Configuration(ConfigFactory.load("application.test.conf"))).build()
+      .configure(Configuration(ConfigFactory.load("application.conf"))).build()
 
   lazy val databaseApi = app.injector.instanceOf[DBApi]
   val db = databaseApi.database("default")
