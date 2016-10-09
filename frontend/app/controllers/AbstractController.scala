@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.UUID
 import javax.inject._
 
 import daos.BaseDao
@@ -28,14 +29,23 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
         }
       },
       r => {
-        service.insert(r) map { id =>
-          Ok(Json.obj("status" -> "OK", "message" -> "object created", "object" -> r.copy(id=Some(id)))).as("text/json")
+        var rr = r
+
+        if (r.id.isEmpty) {
+          val id = UUID.randomUUID()
+          rr = r.copy(id=Option(id))
+        }
+
+        service.insert(rr) map { id =>
+          Ok(Json.obj("status" -> "OK", "message" -> "object created", "object" -> rr)).as("text/json")
         } recover {
           case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
         }
       })
   }
-  def put(id:Long) = Action.async(BodyParsers.parse.json) { request => {
+  def put(sid: String) = Action.async(BodyParsers.parse.json) { request => {
+    val id = UUID.fromString(sid)
+
     request.body.validate[M]
       .filter(JsError(s"id is specified in the body and not equal to $id"))(s => {s.id.isEmpty || s.id.get == id})
       .fold(
@@ -53,14 +63,18 @@ abstract class AbstractController[T <: BaseTable[M], M <: BaseModel[M]] @Inject(
           }
         })
   }}
-  def delete(id: Long) = Action.async { request =>
+  def delete(sid: String) = Action.async { request =>
+    val id = UUID.fromString(sid)
+
     service.deleteById(id) map { r =>
       Ok(Json.obj("status" -> "OK", "message" -> "object deleted")).as("text/json")
     } recover {
       case e => InternalServerError(Json.obj("status" -> "KO", "errors" -> e.getMessage)).as("text/json")
     }
   }
-  def get(id: Long) = Action.async { request =>
+  def get(sid: String) = Action.async { request =>
+    val id = UUID.fromString(sid)
+
     service.findById(id) map { r =>
       Ok(Json.toJson(r)).as("text/json")
     } recover {

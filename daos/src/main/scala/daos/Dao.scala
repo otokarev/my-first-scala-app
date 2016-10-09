@@ -1,5 +1,7 @@
 package daos
 
+import java.util.UUID
+
 import daos.models.BaseModel
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
@@ -10,14 +12,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 trait BaseDao[T,A] {
-  def insert(row : A): Future[Long]
-  def insert(rows : Seq[A]): Future[Seq[Long]]
+  def insert(row : A): Future[Any]
   def update(row : A): Future[Int]
   def update(rows : Seq[A]): Future[Unit]
-  def findById(id : Long): Future[Option[A]]
+  def findById(id : UUID): Future[Option[A]]
   def findByFilter[C : CanBeQueryCondition](f: (T) => C): Future[Seq[A]]
-  def deleteById(id : Long): Future[Int]
-  def deleteById(ids : Seq[Long]): Future[Int]
+  def deleteById(id : UUID): Future[Int]
+  def deleteById(ids : Seq[UUID]): Future[Int]
   def deleteByFilter[C : CanBeQueryCondition](f:  (T) => C): Future[Int]
 }
 
@@ -30,12 +31,8 @@ class Dao[T <: BaseTable[A], A <: BaseModel[A]]()(
   import dbConfig.driver.api._
   val db = dbConfig.db
 
-  def insert(row : A): Future[Long] ={
-    insert(Seq(row)).map(_.head)
-  }
-
-  def insert(rows : Seq[A]): Future[Seq[Long]] ={
-    db.run(tableQ returning tableQ.map(_.id) ++= rows.filter(_.isValid))
+  def insert(row : A) = {
+    db.run(tableQ ++= Seq(row).filter(_.isValid))
   }
 
   def update(row : A): Future[Int] = {
@@ -46,10 +43,10 @@ class Dao[T <: BaseTable[A], A <: BaseModel[A]]()(
   }
 
   def update(rows : Seq[A]): Future[Unit] = {
-    db.run(DBIO.seq(rows.filter(_.isValid).map(r => tableQ.filter(_.id === r.id).update(r)): _*))
+    db.run(DBIO.seq(rows.filter(_.isValid).map(r => tableQ.filter(_.id === UUID.fromString(r.id.get.toString.replace("-", ""))).update(r)): _*))
   }
 
-  def findById(id : Long): Future[Option[A]] = {
+  def findById(id : UUID): Future[Option[A]] = {
     db.run(tableQ.filter(_.id === id).result.headOption)
   }
 
@@ -57,11 +54,11 @@ class Dao[T <: BaseTable[A], A <: BaseModel[A]]()(
     db.run(tableQ.withFilter(f).result)
   }
 
-  def deleteById(id : Long): Future[Int] = {
+  def deleteById(id : UUID): Future[Int] = {
     deleteById(Seq(id))
   }
 
-  def deleteById(ids : Seq[Long]): Future[Int] = {
+  def deleteById(ids : Seq[UUID]): Future[Int] = {
     db.run(tableQ.filter(_.id.inSet(ids)).delete)
   }
 

@@ -1,5 +1,7 @@
 package daos
 
+import java.util.UUID
+
 import daos.models.{ChannelModel, ChannelSubscriberModel, SubscriberModel}
 
 object Tables {
@@ -7,7 +9,7 @@ object Tables {
   import dbConfig.driver.api._
 
   abstract class BaseTable[T](tag: Tag, name: String) extends Table[T](tag, name) {
-    def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
+    def id = column[UUID]("id", O.PrimaryKey)
   }
 
   class SubscriberTable(tag: Tag) extends BaseTable[SubscriberModel](tag, "subscriber") {
@@ -26,8 +28,8 @@ object Tables {
   class ChannelSubscriberTable(tag: Tag) extends BaseTable[ChannelSubscriberModel](tag, "channel_subscriber") {
 
     def title = column[String]("title")
-    def channelId = column[Long]("channel_id")
-    def subscriberId = column[Long]("subscriber_id")
+    def channelId = column[UUID]("channel_id")
+    def subscriberId = column[UUID]("subscriber_id")
     def cfg = column[String]("cfg")
 
     def * = (id.?, title, channelId, subscriberId, cfg) <> (ChannelSubscriberModel.tupled, ChannelSubscriberModel.unapply)

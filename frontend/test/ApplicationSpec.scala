@@ -1,3 +1,5 @@
+import java.util.UUID
+
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play._
@@ -24,10 +26,16 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
   val db = databaseApi.database("default")
   Evolutions.applyEvolutions(db)
 
+  val subscriberUuid = UUID.randomUUID()
+  val channelUuid = "6ff7df4c-8cb1-11e6-b672-2f15697ed957"
+  val badChannelUuid = UUID.randomUUID()
+  val badSubscriberUuid = UUID.randomUUID()
+
   "Subscriber" should {
 
     "create new instance with title=First" in {
       val r1 = route(app, FakeRequest(POST, "/subscriber/").withJsonBody(Json.obj(
+        "id" -> subscriberUuid,
         "title" -> "First"
       ))).get
 
@@ -36,21 +44,21 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
       contentType(r1) mustBe Some("text/json")
       (Json.parse(contentAsString(r1)) \ "object" \ "title").as[String] mustEqual "First"
 
-      (Json.parse(contentAsString(r1)) \ "object" \ "id").as[Long] mustEqual 1
+      (Json.parse(contentAsString(r1)) \ "object" \ "id").as[UUID] mustEqual subscriberUuid
     }
 
-    "Update just created instance with title=Second" in {
-      val r2 = route(app, FakeRequest(PUT, "/subscriber/1").withJsonBody(Json.obj(
+    "update just created instance with title=Second" in {
+      val r2 = route(app, FakeRequest(PUT, s"/subscriber/$subscriberUuid").withJsonBody(Json.obj(
         "title" -> "Second"
       ))).get
       println(contentAsString(r2))
 
       status(r2) mustBe OK
-      val r3 = route(app, FakeRequest(GET, "/subscriber/1")).get
+      val r3 = route(app, FakeRequest(GET, s"/subscriber/$subscriberUuid")).get
       println(contentAsString(r3))
       status(r3) mustBe OK
       (Json.parse(contentAsString(r3)) \ "title").as[String] mustEqual "Second"
-      (Json.parse(contentAsString(r3)) \ "id").as[Long] mustEqual 1
+      (Json.parse(contentAsString(r3)) \ "id").as[UUID] mustEqual subscriberUuid
     }
 
     "Check that under /subscriber/ our new record is also available" in {
@@ -59,7 +67,7 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
 
       status(r4) mustBe OK
       ((Json.parse(contentAsString(r4)) \ "items")(0) \ "title").as[String] mustEqual "Second"
-      ((Json.parse(contentAsString(r4)) \ "items")(0) \ "id").as[Long] mustEqual 1
+      ((Json.parse(contentAsString(r4)) \ "items")(0) \ "id").as[UUID] mustEqual subscriberUuid
     }
 
     "Check that subscriber can be deleted" in {
@@ -69,7 +77,7 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
 
       println(contentAsString(r1))
 
-      val id = (Json.parse(contentAsString(r1)) \ "object" \ "id").as[Long]
+      val id = (Json.parse(contentAsString(r1)) \ "object" \ "id").as[UUID]
       val r2 = route(app, FakeRequest(DELETE, s"/subscriber/$id")).get
       status(r2) mustBe OK
     }
@@ -80,12 +88,12 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
 
       status(r) mustBe OK
       ((Json.parse(contentAsString(r)) \ "items")(0) \ "title").as[String] mustEqual "Default - 01"
-      ((Json.parse(contentAsString(r)) \ "items")(0) \ "id").as[Long] mustEqual 1
+      ((Json.parse(contentAsString(r)) \ "items")(0) \ "id").as[String] mustEqual channelUuid
     }
 
     "Check POST /channel-subscriber with wrong channelId" in {
       val r = route(app, FakeRequest(POST, "/channel-subscriber/").withJsonBody(Json.obj(
-        "title" -> "Second", "channelId" -> -1, "subscriberId" -> 1, "cfg" -> "config1"
+        "title" -> "Second", "channelId" -> badChannelUuid, "subscriberId" -> subscriberUuid, "cfg" -> "config1"
       ))).get
       println(contentAsString(r))
       ((Json.parse(contentAsString(r)) \ "errors" \ "obj.channelId" )(0) \ "msg")(0).as[String] mustEqual "object not found"
@@ -93,7 +101,7 @@ class ApplicationSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAl
 
     "Check POST /channel-subscriber with wrong subscriberId" in {
       val r = route(app, FakeRequest(POST, "/channel-subscriber/").withJsonBody(Json.obj(
-        "title" -> "Second", "channelId" -> 1, "subscriberId" -> 2, "cfg" -> "config1"
+        "title" -> "Second", "channelId" -> channelUuid, "subscriberId" -> badSubscriberUuid, "cfg" -> "config1"
       ))).get
       println(contentAsString(r))
       ((Json.parse(contentAsString(r)) \ "errors" \ "obj.subscriberId" )(0) \ "msg")(0).as[String] mustEqual "object not found"
