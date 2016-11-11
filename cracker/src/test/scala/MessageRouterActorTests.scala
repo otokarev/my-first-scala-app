@@ -1,8 +1,8 @@
+import TestUtils.FakeSource
 import akka.actor.ActorSystem
 import akka.testkit.{EventFilter, ImplicitSender, TestKit, TestProbe}
 import org.scalatest._
 import com.typesafe.config.ConfigFactory
-
 import cracker.actors.MessageRouterActor
 
 class MessageRouterActorTests(_system: ActorSystem) extends TestKit(_system: ActorSystem)
@@ -18,7 +18,12 @@ class MessageRouterActorTests(_system: ActorSystem) extends TestKit(_system: Act
   akka.loggers = ["akka.testkit.TestEventListener"]
                                 """)))
 
-  override def afterAll() = TestKit.shutdownActorSystem(system)
+  override def beforeAll(): Unit = {
+
+  }
+  override def afterAll(): Unit = {
+    TestKit.shutdownActorSystem(system)
+  }
 
   "Message router actor" must {
     "accept events with correct channel and subscriber ids" in {

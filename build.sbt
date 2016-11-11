@@ -36,6 +36,7 @@ lazy val cracker = (project in file("cracker"))
     libraryDependencies ++= (Dependencies.cracker),
     fork in run := true,
     commonSettings
-  ).dependsOn(frontend % "test->compile")
+  ).dependsOn(daos)
+  .aggregate(daos)
 
 fork in run := true
